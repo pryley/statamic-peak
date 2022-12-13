@@ -1,0 +1,44 @@
+{{ form:create :in="form:handle"
+                id="form-{form:handle}"
+                class="flex flex-wrap"
+            }}
+                <div class="w-full grid md:grid-cols-12 gap-6">
+                    {{# Honeypot spam protection. #}}
+                    <div class="hidden">
+                        <label class="font-bold" for="{{ honeypot }}">{{ trans:strings.form_honeypot }} <sup class="text-yellow-400">*</sup></label>
+                        <input class="form-input w-full" id="{{ honeypot }}" type="text" name="{{ honeypot }}" tabindex="-1" autocomplete="off"/>
+                    </div>
+
+                    {{# Render the default-styled fields. #}}
+                    {{ fields }}
+                        <div class="flex flex-col space-y-3
+                            {{ width == '25' ?= 'md:col-span-3' }}
+                            {{ width == '33' ?= 'md:col-span-4' }}
+                            {{ width == '50' ?= 'md:col-span-6' }}
+                            {{ width == '66' ?= 'md:col-span-8' }}
+                            {{ width == '75' ?= 'md:col-span-9' }}
+                            {{ width == '100' ?= 'md:col-span-12' }}"
+                        >
+                            {{ unless type === 'section' }}
+                                <label class="font-bold" for="{{ handle }}">
+                                    {{ trans :key="display" }}
+                                    {{ if validate | contains('required') }}
+                                        <sup class="text-yellow-400">*</sup>
+                                    {{ /if }}
+                                    {{ if instructions }}
+                                        <p class="font-normal text-sm my-1">{{ trans :key="instructions" }}</p>
+                                    {{ /if }}
+                                </label>
+                            {{ /unless }}
+
+                            <div class="flex flex-col space-y-2">
+                                {{ field }}
+                            </div>
+                        </div>
+                    {{ /fields }}
+
+                    <div class="md:col-span-12 flex justify-end">
+                        {{ partial:components/button as="button" label="{ trans:strings.form_send }" }}
+                    </div>
+                </div>
+            {{ /form:create }}
